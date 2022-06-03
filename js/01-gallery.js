@@ -3,7 +3,9 @@ import { galleryItems } from './gallery-items.js';
 console.log(galleryItems);
 
 const itemsOnList = document.querySelector('div.gallery')
-const makeListMarkupOfImages = ({original, preview, description}) => {
+
+function makeListMarkup(galleryItems) {
+  return galleryItems.map(({ preview, original, description }) => {
     return `<div class="gallery__item">
   <a class="gallery__link" href="${original}">
     <img
@@ -13,19 +15,37 @@ const makeListMarkupOfImages = ({original, preview, description}) => {
       alt="${description}"
     />
   </a>
-</div>`
+</div>`;
+  }).join("");
 }
+const items = makeListMarkup(galleryItems);
 
-const makeImages = galleryItems.map(makeListMarkupOfImages).join('');
-itemsOnList.insertAdjacentHTML('afterbegin', makeImages)
+itemsOnList.insertAdjacentHTML('afterbegin', items);
 
 itemsOnList.addEventListener('click', modalShow);
 
+let modalWindow;
+
+
 function modalShow(event) {
-    event.preventDefault();
-    const modalWindow = basicLightbox.create(
-        `<img src="${event.target.dataset.source}" width="800" height="600">`)
+  if (event.target.nodeName !== "IMG") {
+        return;
+    }
+  event.preventDefault();
+  
+  modalWindow = basicLightbox.create(
+      `<img src="${event.target.dataset.source}" width="800" height="600">`,
+      {
+        open: () => window.addEventListener('keydown', modalClose),
+        close: () => window.removeEventListener('keydown', modalClose),
+    });
+  
     modalWindow.show();
+    
 };
 
-
+function modalClose(event) {
+  if (event.code === 'Escape') {
+    modalWindow.close()
+  }
+}
