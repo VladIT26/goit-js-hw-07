@@ -36,8 +36,8 @@ function modalShow(event) {
   modalWindow = basicLightbox.create(
       `<img src="${event.target.dataset.source}" width="800" height="600">`,
       {
-        open: () => window.addEventListener('keydown', modalClose),
-        close: () => window.removeEventListener('keydown', modalClose),
+        onShow: () => window.addEventListener('keydown', modalClose),
+        onClose: () => window.removeEventListener('keydown', modalClose),
     });
   
     modalWindow.show();
