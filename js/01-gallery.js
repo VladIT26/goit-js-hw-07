@@ -21,14 +21,13 @@ itemsOnList.insertAdjacentHTML('afterbegin', makeImages)
 
 itemsOnList.addEventListener('click', modalShow);
 
-let tapOnModal;
 
 function modalShow(event) {
     event.preventDefault();
     if (event.target.nodeName !== "IMG") {
         return;
     }
-    tapOnModal = basicLightbox.create(
+    const tapOnModal = basicLightbox.create(
         `<img src="${event.target.dataset.source}" width="800" height="600">`)
     tapOnModal.show();
 };
