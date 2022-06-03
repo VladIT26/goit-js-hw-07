@@ -21,19 +21,26 @@ itemsOnList.insertAdjacentHTML('afterbegin', makeImages)
 
 itemsOnList.addEventListener('click', modalShow);
 
+let tapOnModal;
 
 function modalShow(event) {
     event.preventDefault();
     if (event.target.nodeName !== "IMG") {
         return;
     }
-    const tapOnModal = basicLightbox.create(
-        `<img src="${event.target.dataset.source}" width="800" height="600">`)
-    tapOnModal.show();
+    tapOnModal = basicLightbox.create(
+        `<img src="${event.target.dataset.source}" width="800" height="600">`,
+        { onShow: () => window.addEventListener('keydown', closeModalOnKey),
+        onClose: () => window.removeEventListener('keydown', closeModalOnKey)}),
+    modalShow.show();
 };
 
 
 
 
-
+function closeModalOnKey(evt) {
+  if (evt.code === 'Escape') {
+    modalShow.close();
+  }
+}
 
